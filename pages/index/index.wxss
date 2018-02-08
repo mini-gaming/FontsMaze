@@ -1,0 +1,82 @@
+.game__body {
+  width: 94%;
+  height: 500rpx;
+  margin-top: 30rpx;
+  background-color: #f2f1f2;
+  border-radius: 10rpx;
+}
+.game__rule {
+  margin-top: 30rpx;
+}
+
+.game__panel {
+  width: 94%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.game__panel--word {
+  width: 90rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  background-color: #ecf7ff;
+  color: #000;
+  margin-top: 20rpx;
+  border-radius: 5rpx;
+}
+
+.game__result {
+  position: relative;
+  width: 80%;
+  height: 230rpx;
+  margin-top: 50rpx;
+}
+
+.view__left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.game__result--completed, .game__result--score {
+  margin: 25rpx;
+}
+
+.title, .content {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.content {
+  margin-left: 60rpx;
+  color: #0091ff;
+  font-size: 50rpx;
+}
+
+.view__right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.game__clock {
+  width: 200rpx;
+  height: 200rpx;
+  line-height: 200rpx;
+  text-align: center;
+  border: 5rpx solid #fff;
+  border-radius: 100%;
+}
+
+.game__clock--time {
+  font-size: 60rpx;
+}
+
+.active {
+  color: #fff;
+  background-color: #0091ff;
+}

@@ -1,0 +1,38 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="game__description">
+    请将上下两个图中黑色部分重叠
+  </view>
+  <view class="game__body">
+  </view>
+  <view class="game__rule">
+    无需按照顺序选择四个字
+  </view>
+  <view class="game__panel">
+    <view wx:key="{{index}}"
+          wx:for="{{words}}"
+          wx:for-item="word"
+          id="{{index}}"
+          class="{{word.select == 1 ? 'active':''}} game__panel--word"
+          bindtap="selectWord">
+          {{word.content}}
+    </view>
+  </view>
+  <view class="game__result">
+    <view class="view__left">
+      <view class="game__result--completed">
+        <view class="title">已完成</view>
+        <view class="content">{{completed}}</view>
+      </view>
+      <view class="game__result--score">
+        <view class="title">分数</view>
+        <view class="content">{{score}}</view>
+      </view>
+    </view>
+    <view class="view__right">
+      <view class="game__clock">
+        <view class="game__clock--time">{{time}}</view>
+      </view>
+    </view>
+  </view>
+</view>
