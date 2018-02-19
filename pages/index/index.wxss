@@ -80,3 +80,56 @@
   color: #fff;
   background-color: #0091ff;
 }
+
+.game__body--canvas001 {
+  position: relative;
+  top: 80rpx;
+  width: 600rpx;
+  height: 150rpx;
+  margin: 0 auto;
+}
+
+.game__body--canvas002 {
+  margin: 0 auto;
+  margin-top: 120rpx;
+}
+
+.word {
+  width: 600rpx;
+  height: 200rpx;
+}
+
+.pic {
+  width: 480rpx;
+  height: 120rpx;
+  background-color: #fff;
+}
+
+.homePage {
+  position: fixed; 
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  margin: 0 auto;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+}
+
+.homePage--title {
+  margin-top: 100rpx;
+}
+
+.btn--start {
+  margin-top: 200rpx;
+  width: 80%;
+}
+
+.game__prepare {
+  text-align: center;
+  color: #000;
+}

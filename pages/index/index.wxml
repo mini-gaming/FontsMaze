@@ -1,9 +1,20 @@
 <!--index.wxml-->
-<view class="container">
+<view class="container" hidden='{{!isShow}}'>
   <view class="game__description">
     请将上下两个图中黑色部分重叠
   </view>
   <view class="game__body">
+    <!-- 游戏进行中 -->
+    <view class="game__starting" hidden='{{!gameStarting}}'>
+      <canvas canvas-id="myCanvas1" class="game__body--canvas001"></canvas>
+      <canvas canvas-id="myCanvas2" class="game__body--canvas002"></canvas>
+    </view>
+    <!-- 进入下一题 -->
+    <view class="game__prepare" hidden='{{gameStarting}}'>
+      <view>回答正确</view>
+      <image class="pic" src='{{pic}}'></image>
+      <view>马上进入下一题</view>
+    </view>
   </view>
   <view class="game__rule">
     无需按照顺序选择四个字
@@ -22,17 +33,22 @@
     <view class="view__left">
       <view class="game__result--completed">
         <view class="title">已完成</view>
-        <view class="content">{{completed}}</view>
+        <view class="content">{{result.completed}}</view>
       </view>
       <view class="game__result--score">
         <view class="title">分数</view>
-        <view class="content">{{score}}</view>
+        <view class="content">{{result.score}}</view>
       </view>
     </view>
     <view class="view__right">
       <view class="game__clock">
-        <view class="game__clock--time">{{time}}</view>
+        <view class="game__clock--time">{{gameStatus.showTime}}</view>
       </view>
     </view>
   </view>
 </view>
+<view class="homePage" hidden="{{isShow}}">
+  <view class="homePage--title">最强小脑-字体迷宫</view>
+  <button class="btn--start" bindtap="gameStart">开始游戏</button>
+</view>
+
