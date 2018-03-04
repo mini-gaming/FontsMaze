@@ -1,0 +1,84 @@
+.rank_mask{
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.rank {
+  position: fixed; 
+  z-index: 5000;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 80%;
+  max-width: 600rpx;
+  height: 100%;
+  margin: 0 auto;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.rank-time {
+  margin-top: 30rpx;
+  font-size: 60rpx;
+  font-weight: bolder;
+  color: #ffde49;
+}
+.rank-result {
+  position: relative;
+  width: 600rpx;
+  margin-bottom: 40rpx;
+}
+.rank-diff {
+  position: absolute;
+  top: -40rpx;
+  left: 150rpx;
+  width: 300rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: #ffde49;
+  text-align: center;
+}
+.rank-result_body {
+  background-color: #fff;
+  font-weight: border;
+  border-radius: 15rpx;
+  box-shadow: 0 0 10rpx #fff;
+  margin-top: 60rpx;
+  padding-top: 40rpx;
+}
+.result-title {
+  color: #1cbe25;
+  font-size: 70rpx;
+}
+.result-describe {
+  color: #000;
+  font-size: 40rpx;
+}
+.result-pic {
+  margin: 30rpx 0;
+  width: 280rpx;
+  height: 200rpx;
+}
+.tryAgain {
+  text-align: center;
+  width: 300rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  margin: 0 auto;
+  background-color: #404afb;
+}
+.barcode-pic {
+  margin-top: 30rpx;
+  width: 250rpx;
+  height: 250rpx;
+}
+.btn-close {
+  margin-top: 200rpx;
+}

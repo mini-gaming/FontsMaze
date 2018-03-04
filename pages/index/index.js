@@ -1,137 +1,17 @@
 //index.js
+const service = require('../../service/service.js')
 //获取应用实例
 const app = getApp()
 
 Page({
   data: {
-
-    // 模拟服务器数据
-    mock: {
-      "success": true,
-      "data": {
-        "idioms": [
-          {
-            "question": "天下为公",
-            "picture": "../../resource/img/word.jpg",
-            "options": [
-              "走",
-              "我",
-              "天",
-              "你",
-              "为",
-              "大",
-              "升",
-              "它",
-              "公",
-              "宋",
-              "力",
-              "上",
-              "下",
-              "垃"
-            ],
-            "answer": [
-              2,
-              4,
-              8,
-              12
-            ]
-          },
-          {
-            "question": "天下为公",
-            "picture": "../../resource/img/word.jpg",
-            "options": [
-              "天",
-              "我",
-              "走",
-              "你",
-              "为",
-              "大",
-              "升",
-              "公",
-              "它",
-              "宋",
-              "力",
-              "上",
-              "垃",
-              "下"
-            ],
-            "answer": [
-              0,
-              4,
-              7,
-              13
-            ]
-          }
-        ]
-      }
-    },
+    animationData: {},
     idioms: [],
     isShow: false,
     gameStarting: false,
-    words: [
-      {
-        content: "齐",
-        select: 0
-      }, 
-      {
-        content: "体",
-        select: 0
-      }, 
-      {
-        content: "立",
-        select: 0
-      }, 
-      {
-        content: "水",
-        select: 0
-      }, 
-      {
-        content: "层",
-        select: 0
-      }, 
-      {
-        content: "迷",
-        select: 0
-      }, 
-      {
-        content: "消",
-        select: 0
-      }, 
-      {
-        content: "天",
-        select: 0
-      }, 
-      {
-        content: "圣",
-        select: 0
-      }, 
-      {
-        content: "大",
-        select: 0
-      }, 
-      {
-        content: "果",
-        select: 0
-      }, 
-      {
-        content: "完",
-        select: 0
-      }, 
-      {
-        content: "蛋",
-        select: 0
-      }, 
-      {
-        content: "了",
-        select: 0
-      }
-    ],
     selectArr: [],
-
-    answer: ["0", "7", "9", "8"],
     pic: "",
     level: 0,
-
 
     // 游戏相关状态
     gameStatus: {
@@ -147,51 +27,88 @@ Page({
       score: 0
     }
   },
-
-  // 从服务器上获取数据
-  getGameData: function() {
-    wx.request({
-      url: "../../resource/data/data.json",
-      method: "GET",
-      data: {
-        idiomIndexArr: [0, 8, 11, 3, 99, 12]
-      },
-      dataType: "json",
-      success: function(res) {
-        console.log(res.data)
-      }
-    })
-  },
-
   // 游戏开始
   gameStart: function() {
-    // 初始化游戏初始数据
-    // 初始化游戏第一关数据
-    // 游戏倒计时开始
-    // 延迟两秒的定时器之后换成向数据库请求数据
-    // 服务器上拉取数据
     wx.showLoading({
       title: '游戏初始化',
-    })
-    setTimeout(() => {
-      // 游戏数据初始化
-      this.initGameData(this.data.mock);
-      this.setData({
-        gameStarting: true
-      })
-      this.createQuestion("../../resource/img/word.jpg");
-      wx.hideLoading();
-      this.setData({
-        isShow: true
-      })
-      this.startTimer();
-    }, 1000);
+    });
+    let self = this;
+    let data = {
+      idiomIndexArr: self.random(6, 0, 101)
+    };
+    // 服务器上拉取数据
+    service.post(data, '/game/idiom', function (ret) {
+      if(ret.statusCode === 200) {
+        // 游戏数据初始化
+        self.initGameData(ret.data);
+        self.setData({
+          gameStarting: true
+        });
+        self.createQuestion(self.data.idioms[self.data.level].picture);
+        wx.hideLoading();
+        self.setData({
+          isShow: true
+        })
+        self.startTimer();
+      }
+    });
+  },
+
+  // 随机生成数组
+  random: function(len, start, end) {
+    var arr = [];
+    function _inner(start, end) {
+      var span = end - start;
+      return parseInt(Math.random() * span + start)
+    }
+    while (arr.length < 4) {
+      var num = _inner(start, end);
+      if (arr.indexOf(num) == -1) {
+        arr.push(num);
+      }
+    }
+    return arr;
+　},
+
+  // 随机生产答案
+  answerInit: function(idioms) {
+    if(Array.isArray(idioms) && idioms.length != 0) {
+      idioms.forEach(v => {
+        v.picture = `https://www.zqdnstanley.cn/static/img/${v.question}.jpg`;
+        let answer = this.random(4, 0, 14);
+        let questionArr = v.question.split('');
+
+        let options = Array(14);
+
+        let a = 0;
+        answer.forEach(v => {
+          options[v] = questionArr[a++];
+        });
+
+        let b = 0;
+        for(let i=0; i<14; i++) {
+          if(options[i]) {
+            continue;
+          }
+          options[i] = v.options[b++];
+        }
+        v.options = options;
+        v.answer = answer;
+      });
+    }
+    return idioms;
   },
 
   // 游戏数据初始化
-  initGameData: function(data) {
+  initGameData: function(res) {
+
+    let idioms = res.data.idioms;
+
+    // 随机生成答案
+    this.answerInit(idioms);
+
     this.setData({
-      idioms: data.data.idioms
+      idioms: idioms
     });
     let level = this.data.level;
     let levelData = this.data.idioms[level];
@@ -204,15 +121,16 @@ Page({
       })
     });
     this.setData({
-      level: level + 1,
+      level: level,
       answer: levelData.answer,
-      pic: levelData.pic,
+      pic: levelData.picture,
       words: options
     });
   },
 
   // 游戏结束
   gameEnd: function() {
+    this.showRanking();
     let gameStatus = {
       starting: false,
       level: 0,
@@ -227,9 +145,17 @@ Page({
       // 分数
       score: 0
     };
+
+    let animation = wx.createAnimation({
+      duration: 1000,
+      timingFunction: 'ease'
+    })
+
+
     this.setData({
       gameStatus: gameStatus,
-      result: result
+      result: result,
+      isShow: false
     });
   },
 
@@ -312,11 +238,9 @@ Page({
   // 下一关初始化
   nextLevel: function() {
     let level = this.data.level;
-    if(level == 2) {
-      level = 0;
-    }
     let words = this.data.words;
-    let levelData = this.data.idioms[level];
+    let pic = this.data.idioms[level].picture;
+    let levelData = this.data.idioms[level + 1];
     let options = [];
     levelData.options.forEach(v => {
       options.push({
@@ -327,14 +251,11 @@ Page({
     words.forEach(v => {
       v.select = 0;
     })
-
     this.setData({
       gameStarting: false,
-      pic: levelData.picture,
+      pic: pic,
     });
-
     this.createQuestion(levelData.picture);
-
     setTimeout(() =>  {
       this.setData({
         selectArr: [],
@@ -344,7 +265,6 @@ Page({
         gameStarting: true
       });
     }, 1000);
-    
   },
 
   // 将汉字图片拆分两部分，生成题目
@@ -411,11 +331,30 @@ Page({
     return result;
   },
 
+  showRanking() {
+    let score = this.data.result.score;
+    let leaderboard = this.leaderboard;
+    let gameInfo = {
+      "gameId": 3,
+      "userId": app.globalData.userInfo.userId,
+      "score": score
+    }
+    leaderboard.display();
+    service.post(gameInfo, '/game/record', function (ret) {
+      let personScore = ret.data.data;
+      personScore.score = score;
+      leaderboard.displayScore(personScore);
+    })
+    // let gameInfo = ;
+    // this.ranking.showResult(gameInfo.time, gameInfo.isFinished, level);
+  },
+
   onLoad: function () {
     
   },
 
   onReady: function() {
-    
+    this.ranking = this.selectComponent("#ranking");
+    this.leaderboard = this.selectComponent("#leaderboard");
   }
 })

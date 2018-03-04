@@ -1,0 +1,19 @@
+<view class="rank_container" hidden="{{!isShow}}">
+<!--<view class="rank_container">-->
+  <view class="rank_mask"></view>
+  <view class="rank">
+    <view class="rank-time">{{time}}</view>
+    <view class="rank-result">
+      <view class="rank-diff">
+        <view class="middleCube">{{level}}</view>
+      </view>
+      <view class="rank-result_body">
+        <view class="result-title">{{title}}</view>
+        <view class="result-describe">"{{discribe}}"</view>
+        <image class="result-pic" src="{{pic}}"></image>
+      </view>
+    </view>
+    <view class="tryAgain" bindtap="hideRanking">再来一次</view>
+    <image src="./../../resource/image/barcode.jpg" class="barcode-pic"></image>
+  </view>
+</view>

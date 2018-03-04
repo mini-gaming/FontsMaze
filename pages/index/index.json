@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText":"最强小脑",
+  "navigationBarBackgroundColor": "#ffffff",
+  "backgroundTextStyle": "light",
+  "backgroundColor": "#eeeeee",
+  "enablePullDownRefresh":false,
+  "disableScroll": true,
+  "usingComponents": {
+    "ranking": "/components/rank/rank",
+    "leaderboard":"/components/leaderboard/leader"
+  }
+}

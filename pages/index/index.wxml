@@ -10,7 +10,7 @@
       <canvas canvas-id="myCanvas2" class="game__body--canvas002"></canvas>
     </view>
     <!-- 进入下一题 -->
-    <view class="game__prepare" hidden='{{gameStarting}}'>
+    <view animation="{{animationData}}" class="game__prepare" hidden='{{gameStarting}}'>
       <view>回答正确</view>
       <image class="pic" src='{{pic}}'></image>
       <view>马上进入下一题</view>
@@ -51,4 +51,4 @@
   <view class="homePage--title">最强小脑-字体迷宫</view>
   <button class="btn--start" bindtap="gameStart">开始游戏</button>
 </view>
-
+<leaderboard id="leaderboard"></leaderboard>
