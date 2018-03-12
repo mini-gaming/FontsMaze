@@ -76,6 +76,12 @@
   font-size: 60rpx;
 }
 
+.game__clock--start {
+  font-size: 40rpx;
+  background-color: #5CACEE;
+  border-radius: 50%;
+}
+
 .active {
   color: #fff;
   background-color: #0091ff;
@@ -130,6 +136,29 @@
 }
 
 .game__prepare {
+  margin-top: 100rpx;
   text-align: center;
   color: #000;
+}
+/* .rightConf {
+  display: inline-block;
+  line-height: -80rpx;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background-color: lightgreen;
+} */
+
+.game__prepare--p1 {
+  font-size: 40rpx;
+  margin-bottom: 30rpx;
+}
+
+.game__prepare--p2 {
+  margin-top: 30rpx;
+}
+
+.notStartView {
+  margin-top: 150rpx;
+  text-align: center;
 }

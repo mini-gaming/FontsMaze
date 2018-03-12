@@ -1,32 +1,46 @@
 <!--index.wxml-->
-<view class="container" hidden='{{!isShow}}'>
+<view wx:if="{{gameState}}!=3"class="container">
   <view class="game__description">
     请将上下两个图中黑色部分重叠
   </view>
   <view class="game__body">
     <!-- 游戏进行中 -->
-    <view class="game__starting" hidden='{{!gameStarting}}'>
+    <view hidden="{{gameState == 0 || gameState == 2}}" wx:hiddenclass="game__starting" bindtouchstart = "handletouchtart" bindtouchmove="handletouchmove" bindtouchend="handletouchend">
       <canvas canvas-id="myCanvas1" class="game__body--canvas001"></canvas>
       <canvas canvas-id="myCanvas2" class="game__body--canvas002"></canvas>
     </view>
     <!-- 进入下一题 -->
-    <view animation="{{animationData}}" class="game__prepare" hidden='{{gameStarting}}'>
-      <view>回答正确</view>
+    <view wx:if="{{gameState == 2}}" class="game__prepare">
+      <view class="game__prepare--p1">
+        回答正确
+        <!-- <view class="rightConf"></view> -->
+      </view>
       <image class="pic" src='{{pic}}'></image>
-      <view>马上进入下一题</view>
+      <view class="game__prepare--p2">马上进入下一题 ...</view>
+    </view>
+    <view wx:if="{{gameState == 0}}" class="notStartView">
+      <image class="pic" src='../../resource/image/start.jpg'></image>
     </view>
   </view>
   <view class="game__rule">
     无需按照顺序选择四个字
   </view>
   <view class="game__panel">
-    <view wx:key="{{index}}"
+    <view wx:if="{{gameState !=0}}" wx:key="{{index}}"
           wx:for="{{words}}"
           wx:for-item="word"
           id="{{index}}"
           class="{{word.select == 1 ? 'active':''}} game__panel--word"
           bindtap="selectWord">
           {{word.content}}
+    </view>
+    <view wx:if="{{gameState == 0}}" wx:key="{{index}}"
+          wx:for="{{startWords}}"
+          wx:for-item="word"
+          id="{{index}}"
+          class="game__panel--word"
+          >
+          {{word}}
     </view>
   </view>
   <view class="game__result">
@@ -42,13 +56,10 @@
     </view>
     <view class="view__right">
       <view class="game__clock">
-        <view class="game__clock--time">{{gameStatus.showTime}}</view>
+        <view wx-if="{{gameState != 0}}" class="game__clock--time">{{gameStatus.showTime}}</view>
+        <view wx-if="{{gameState == 0}}" class="game__clock--start" bindtap="gameStart">开始游戏</view>
       </view>
     </view>
   </view>
-</view>
-<view class="homePage" hidden="{{isShow}}">
-  <view class="homePage--title">最强小脑-字体迷宫</view>
-  <button class="btn--start" bindtap="gameStart">开始游戏</button>
 </view>
 <leaderboard id="leaderboard"></leaderboard>

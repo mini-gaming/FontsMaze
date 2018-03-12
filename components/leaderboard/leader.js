@@ -2,7 +2,6 @@
 const app = getApp()
 const shareDesc1 = '快来测测你的脑力值'
 const shareDesc2 = '我的脑力值是$s，不服来战'
-const util = require('../../utils/util.js')
 
 Component({
   /**
@@ -40,10 +39,6 @@ Component({
       this.setData({
         isShow: true
       });
-      // app.globalData.game.setData({
-      //   isAnimation: false
-      // });
-      // app.globalData.shareDesc = shareDesc1;
     },
     getGlobalMaxScore(){
       return 10000;
@@ -69,7 +64,6 @@ Component({
         percent: !gameInfo.beatPercent ? '100%' : Math.floor(gameInfo.beatPercent*100)+"%",
         globalMaxScore: gameInfo.kingScore
       })
-      // app.globalData.shareDesc = util.replace(shareDesc2, Math.floor(gameInfo.kingScore/gameInfo.time*10000));
     },
     showToast(){
       wx.showModal({

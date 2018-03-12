@@ -7,11 +7,11 @@ Page({
   data: {
     animationData: {},
     idioms: [],
-    isShow: false,
-    gameStarting: false,
+    gameState: 0,
     selectArr: [],
     pic: "",
     level: 0,
+    startWords: ["请", "点", "击", "右", "下", "角", "蓝", "色", "按", "钮", "开", "始", "游","戏"],
 
     // 游戏相关状态
     gameStatus: {
@@ -42,13 +42,10 @@ Page({
         // 游戏数据初始化
         self.initGameData(ret.data);
         self.setData({
-          gameStarting: true
+          gameState: 1
         });
         self.createQuestion(self.data.idioms[self.data.level].picture);
         wx.hideLoading();
-        self.setData({
-          isShow: true
-        })
         self.startTimer();
       }
     });
@@ -132,7 +129,6 @@ Page({
   gameEnd: function() {
     this.showRanking();
     let gameStatus = {
-      starting: false,
       level: 0,
       time: 60000,
       showTime: "01:00",
@@ -146,16 +142,10 @@ Page({
       score: 0
     };
 
-    let animation = wx.createAnimation({
-      duration: 1000,
-      timingFunction: 'ease'
-    })
-
-
     this.setData({
       gameStatus: gameStatus,
       result: result,
-      isShow: false
+      gameState: 0
     });
   },
 
@@ -227,7 +217,8 @@ Page({
         result.completed = result.completed + 1;
         result.score = result.score + 100;
         this.setData({
-          result: result
+          result: result,
+          gameState: 2
         });
         // 游戏第二关初始化
         this.nextLevel();
@@ -239,8 +230,12 @@ Page({
   nextLevel: function() {
     let level = this.data.level;
     let words = this.data.words;
+
+    let idioms = [].concat(this.data.idioms);
+    idioms.splice(level, 1);
+
     let pic = this.data.idioms[level].picture;
-    let levelData = this.data.idioms[level + 1];
+    let levelData = idioms[level];
     let options = [];
     levelData.options.forEach(v => {
       options.push({
@@ -252,17 +247,16 @@ Page({
       v.select = 0;
     })
     this.setData({
-      gameStarting: false,
-      pic: pic,
+      pic: pic
     });
     this.createQuestion(levelData.picture);
     setTimeout(() =>  {
       this.setData({
         selectArr: [],
-        level: level + 1,
         answer: levelData.answer,
         words: options,
-        gameStarting: true
+        gameState: 1,
+        idioms: idioms
       });
     }, 1000);
   },
@@ -340,13 +334,86 @@ Page({
       "score": score
     }
     leaderboard.display();
-    service.post(gameInfo, '/game/record', function (ret) {
+    service.post(gameInfo, '/game/score', function (ret) {
+      console.log(ret)
       let personScore = ret.data.data;
       personScore.score = score;
       leaderboard.displayScore(personScore);
     })
     // let gameInfo = ;
     // this.ranking.showResult(gameInfo.time, gameInfo.isFinished, level);
+  },
+
+  //滑动开始事件
+  handletouchtart: function (event) {
+    this.data.lastX = event.touches[0].pageX;
+    this.data.lastY = event.touches[0].pageY;
+  },
+
+  //滑动移动事件
+  handletouchmove: function (event) {
+    var currentX = event.touches[0].pageX
+    var tx = currentX - this.data.lastX
+    //左右方向滑动
+    if (tx < -20) {
+      this.data.currentGesture = 1;
+    } else if (tx > 20) {
+      this.data.currentGesture = 2;
+    }
+  },
+
+  //滑动结束事件
+  handletouchend: function (event) {
+    if (this.data.currentGesture === 1) {
+      this.jumpLevel(2);
+    } else if (this.data.currentGesture === 2) {
+      this.jumpLevel(1);
+    } else {
+      return;
+    }
+    this.data.currentGesture = 0
+  },
+
+  // 跳过关卡，option=1为上一关，2为下一关
+  jumpLevel: function (option) {
+    let level = this.data.level;
+    let words = this.data.words;
+    let pic = this.data.idioms[level].picture;
+    let currentLevel;
+    let length = this.data.idioms.length - 1;
+    if(option === 1) {
+      if(level === 0) {
+        currentLevel = length;
+      } else {
+        currentLevel = level - 1;
+      }
+    } else if(option === 2) {
+      if (level === length) {
+        currentLevel = 0;
+      } else {
+        currentLevel = level + 1;
+      }
+    } else {
+      return;
+    }
+    let levelData = this.data.idioms[currentLevel];
+    let options = [];
+    levelData.options.forEach(v => {
+      options.push({
+        content: v,
+        select: 0
+      })
+    });
+    words.forEach(v => {
+      v.select = 0;
+    })
+    this.createQuestion(levelData.picture);
+    this.setData({
+      selectArr: [],
+      level: currentLevel,
+      answer: levelData.answer,
+      words: options
+    });
   },
 
   onLoad: function () {
